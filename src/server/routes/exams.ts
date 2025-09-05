@@ -3,7 +3,7 @@ import { Router } from 'express';
 const router = Router();
 
 // GET /api/v1/exams - Get all exams
-router.get('/', (req, res) => {
+router.get('/', (_req, res) => {
   res.json({
     success: true,
     message: 'Exams routes placeholder'
@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 });
 
 // POST /api/v1/exams - Create new exam
-router.post('/', (req, res) => {
+router.post('/', (_req, res) => {
   res.json({
     success: true,
     message: 'Create exam placeholder'

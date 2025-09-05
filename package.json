@@ -18,7 +18,12 @@
     "type-check": "tsc --noEmit",
     "prepare": "husky install",
     "docker:build": "docker build -t lgs-egitim-app .",
-    "docker:run": "docker run -p 3000:3000 lgs-egitim-app"
+    "docker:run": "docker run -p 3000:3000 lgs-egitim-app",
+    "migrate": "knex migrate:latest --knexfile src/server/config/database.ts",
+    "seed": "knex seed:run --knexfile src/server/config/database.ts",
+    "db:setup": "npm run migrate && npm run seed",
+    "vercel-build": "npm run build",
+    "postinstall": "cd client && npm install"
   },
   "keywords": [
     "lgs",

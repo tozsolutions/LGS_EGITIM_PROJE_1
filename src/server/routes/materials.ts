@@ -3,7 +3,7 @@ import { Router } from 'express';
 const router = Router();
 
 // GET /api/v1/materials - Get all study materials
-router.get('/', (req, res) => {
+router.get('/', (_req, res) => {
   res.json({
     success: true,
     message: 'Materials routes placeholder'
@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 });
 
 // POST /api/v1/materials - Create new material
-router.post('/', (req, res) => {
+router.post('/', (_req, res) => {
   res.json({
     success: true,
     message: 'Create material placeholder'
@@ -19,7 +19,7 @@ router.post('/', (req, res) => {
 });
 
 // POST /api/v1/materials/upload - Upload file
-router.post('/upload', (req, res) => {
+router.post('/upload', (_req, res) => {
   res.json({
     success: true,
     message: 'Upload file placeholder'

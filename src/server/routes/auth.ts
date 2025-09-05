@@ -13,7 +13,7 @@ router.get('/profile', (req: AuthRequest, res) => {
 });
 
 // POST /api/v1/auth/login - Login user
-router.post('/login', (req, res) => {
+router.post('/login', (_req, res) => {
   res.json({
     success: true,
     message: 'Login endpoint placeholder'
@@ -21,7 +21,7 @@ router.post('/login', (req, res) => {
 });
 
 // POST /api/v1/auth/register - Register new user
-router.post('/register', (req, res) => {
+router.post('/register', (_req, res) => {
   res.json({
     success: true,
     message: 'Register endpoint placeholder'
@@ -29,7 +29,7 @@ router.post('/register', (req, res) => {
 });
 
 // POST /api/v1/auth/refresh - Refresh access token
-router.post('/refresh', (req, res) => {
+router.post('/refresh', (_req, res) => {
   res.json({
     success: true,
     message: 'Refresh token endpoint placeholder'
@@ -37,7 +37,7 @@ router.post('/refresh', (req, res) => {
 });
 
 // POST /api/v1/auth/logout - Logout user
-router.post('/logout', (req, res) => {
+router.post('/logout', (_req, res) => {
   res.json({
     success: true,
     message: 'Logout endpoint placeholder'

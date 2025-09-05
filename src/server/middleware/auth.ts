@@ -12,15 +12,16 @@ interface AuthRequest extends Request {
   };
 }
 
-export const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authenticate = (req: AuthRequest, res: Response, next: NextFunction): void => {
   try {
     const authHeader = req.headers.authorization;
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
+      res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
         message: ERROR_MESSAGES.UNAUTHORIZED
       });
+      return;
     }
 
     const token = authHeader.substring(7); // Remove 'Bearer ' prefix
@@ -34,29 +35,33 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
       };
       
       next();
+      return;
     } catch (tokenError) {
       logger.warn('Invalid token attempt', { token: token.substring(0, 10) + '...', ip: req.ip });
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
+      res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
         message: ERROR_MESSAGES.TOKEN_INVALID
       });
+      return;
     }
   } catch (error) {
     logger.error('Authentication middleware error:', error);
-    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: ERROR_MESSAGES.INTERNAL_ERROR
     });
+    return;
   }
 };
 
 export const authorize = (roles: UserRole[]) => {
-  return (req: AuthRequest, res: Response, next: NextFunction) => {
+  return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
+      res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
         message: ERROR_MESSAGES.UNAUTHORIZED
       });
+      return;
     }
 
     if (!roles.includes(req.user.role)) {
@@ -67,17 +72,19 @@ export const authorize = (roles: UserRole[]) => {
         route: req.path
       });
       
-      return res.status(HTTP_STATUS.FORBIDDEN).json({
+      res.status(HTTP_STATUS.FORBIDDEN).json({
         success: false,
         message: ERROR_MESSAGES.UNAUTHORIZED
       });
+      return;
     }
 
     next();
+    return;
   };
 };
 
-export const optionalAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const optionalAuth = (req: AuthRequest, _res: Response, next: NextFunction): void => {
   try {
     const authHeader = req.headers.authorization;
     
@@ -101,6 +108,7 @@ export const optionalAuth = (req: AuthRequest, res: Response, next: NextFunction
   } catch (error) {
     logger.error('Optional authentication middleware error:', error);
     next(); // Continue without authentication
+    return;
   }
 };
 

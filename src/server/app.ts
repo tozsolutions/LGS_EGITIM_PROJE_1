@@ -7,7 +7,6 @@ import path from 'path';
 import fs from 'fs';
 
 import config from './config';
-import { initializeDatabase, closeDatabase } from './config/database';
 import logger from './utils/logger';
 import { HTTP_STATUS } from '../shared/constants';
 
@@ -158,8 +157,11 @@ class Server {
 
   public async start(): Promise<void> {
     try {
-      // Initialize database
-      await initializeDatabase();
+      // Initialize database (optional)
+      if (!config.skipDatabaseInit) {
+        const { initializeDatabase } = await import('./config/database');
+        await initializeDatabase();
+      }
 
       // Start server
       const port = config.port;
@@ -184,7 +186,10 @@ class Server {
     logger.info('🔄 Shutting down server...');
     
     try {
-      await closeDatabase();
+      if (!config.skipDatabaseInit) {
+        const { closeDatabase } = await import('./config/database');
+        await closeDatabase();
+      }
       logger.info('✅ Server shutdown complete');
       process.exit(0);
     } catch (error) {

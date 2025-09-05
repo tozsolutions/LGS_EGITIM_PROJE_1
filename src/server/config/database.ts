@@ -1,6 +1,7 @@
 import knex, { Knex } from 'knex';
 import config from './index';
 import path from 'path';
+import fs from 'fs';
 
 const dbConfig: Knex.Config = {
   client: 'sqlite3',
@@ -10,11 +11,11 @@ const dbConfig: Knex.Config = {
   useNullAsDefault: true,
   migrations: {
     directory: path.join(__dirname, '../migrations'),
-    extension: 'ts'
+    loadExtensions: ['.ts', '.js']
   },
   seeds: {
     directory: path.join(__dirname, '../seeds'),
-    extension: 'ts'
+    loadExtensions: ['.ts', '.js']
   },
   pool: {
     afterCreate: (conn: any, done: any) => {
@@ -38,12 +39,19 @@ export async function initializeDatabase(): Promise<void> {
     await db.migrate.latest();
     console.log('✅ Database migrations completed');
     
-    // Check if we need to run seeds (in development)
+    // Check if we need to run seeds (in development) and seeds exist
     if (config.env === 'development') {
-      const hasUsers = await db('users').select('id').first();
-      if (!hasUsers) {
-        await db.seed.run();
-        console.log('✅ Database seeds completed');
+      const seedsDir = dbConfig.seeds && 'directory' in dbConfig.seeds ? (dbConfig.seeds as any).directory : undefined;
+      const hasSeedsDir = typeof seedsDir === 'string' && fs.existsSync(seedsDir);
+      if (hasSeedsDir) {
+        const seedFiles = fs.readdirSync(seedsDir).filter((f) => f.endsWith('.ts') || f.endsWith('.js'));
+        if (seedFiles.length > 0) {
+          const hasUsers = await db('users').select('id').first();
+          if (!hasUsers) {
+            await db.seed.run();
+            console.log('✅ Database seeds completed');
+          }
+        }
       }
     }
     

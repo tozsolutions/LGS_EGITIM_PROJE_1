@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import config from '../config';
 
 export class AuthUtils {
@@ -12,19 +12,15 @@ export class AuthUtils {
   }
 
   static generateTokens(payload: object) {
-    const accessToken = jwt.sign(payload, config.jwt.secret, {
-      expiresIn: config.jwt.expiresIn,
-    });
-
-    const refreshToken = jwt.sign(payload, config.jwt.secret, {
-      expiresIn: config.jwt.refreshExpiresIn,
-    });
-
+    const signOptions: SignOptions = { expiresIn: config.jwt.expiresIn };
+    const refreshOptions: SignOptions = { expiresIn: config.jwt.refreshExpiresIn };
+    const accessToken = jwt.sign(payload as any, config.jwt.secret as unknown as jwt.Secret, signOptions);
+    const refreshToken = jwt.sign(payload as any, config.jwt.secret as unknown as jwt.Secret, refreshOptions);
     return { accessToken, refreshToken };
   }
 
   static verifyToken(token: string): any {
-    return jwt.verify(token, config.jwt.secret);
+    return jwt.verify(token, config.jwt.secret as unknown as jwt.Secret);
   }
 
   static validatePassword(password: string): { isValid: boolean; errors: string[] } {

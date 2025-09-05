@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: lgs-egitim-api
+    env: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm ci --no-audit --no-fund && npm run build:server
+    startCommand: node dist/server/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: JWT_SECRET
+        sync: false
+      - key: ADMIN_EMAIL
+        value: admin@lgs-egitim.com
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://your-frontend-domain
+

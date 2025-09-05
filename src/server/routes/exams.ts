@@ -3,7 +3,7 @@ import { Router } from 'express';
 const router = Router();
 
 // GET /api/v1/exams - Get all exams
-router.get('/', (req, res) => {
+router.get('/', (_req, res) => {
   res.json({
     success: true,
     message: 'Exams routes placeholder'
@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 });
 
 // POST /api/v1/exams - Create new exam
-router.post('/', (req, res) => {
+router.post('/', (_req, res) => {
   res.json({
     success: true,
     message: 'Create exam placeholder'
@@ -27,18 +27,18 @@ router.get('/:id', (req, res) => {
 });
 
 // POST /api/v1/exams/:id/start - Start exam attempt
-router.post('/:id/start', (req, res) => {
+router.post('/:id/start', (_req, res) => {
   res.json({
     success: true,
-    message: `Start exam ${req.params.id} placeholder`
+    message: 'Start exam placeholder'
   });
 });
 
 // POST /api/v1/exams/:id/submit - Submit exam answers
-router.post('/:id/submit', (req, res) => {
+router.post('/:id/submit', (_req, res) => {
   res.json({
     success: true,
-    message: `Submit exam ${req.params.id} placeholder`
+    message: 'Submit exam placeholder'
   });
 });
 

@@ -1,9 +1,17 @@
 import winston from 'winston';
 import path from 'path';
+import fs from 'fs';
 import config from '../config';
 
-// Create logs directory if it doesn't exist
+// Ensure logs directory exists before creating file transports
 const logDir = path.dirname(config.logging.file);
+try {
+  if (!fs.existsSync(logDir)) {
+    fs.mkdirSync(logDir, { recursive: true });
+  }
+} catch {
+  // If directory creation fails, fallback to console-only logging below
+}
 
 const logger = winston.createLogger({
   level: config.logging.level,

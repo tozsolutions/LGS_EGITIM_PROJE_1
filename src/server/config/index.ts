@@ -7,6 +7,7 @@ interface Config {
   env: string;
   port: number;
   apiPrefix: string;
+  skipDatabaseInit: boolean;
   
   // Database
   database: {
@@ -56,6 +57,7 @@ const config: Config = {
   env: process.env.NODE_ENV || 'development',
   port: parseInt(process.env.PORT || '3000', 10),
   apiPrefix: process.env.API_PREFIX || '/api/v1',
+  skipDatabaseInit: process.env.SKIP_DB === 'true',
   
   database: {
     type: process.env.DB_TYPE || 'sqlite',

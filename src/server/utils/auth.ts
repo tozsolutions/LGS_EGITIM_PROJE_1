@@ -14,11 +14,11 @@ export class AuthUtils {
   static generateTokens(payload: object) {
     const accessToken = jwt.sign(payload, config.jwt.secret, {
       expiresIn: config.jwt.expiresIn,
-    });
+    } as jwt.SignOptions);
 
     const refreshToken = jwt.sign(payload, config.jwt.secret, {
       expiresIn: config.jwt.refreshExpiresIn,
-    });
+    } as jwt.SignOptions);
 
     return { accessToken, refreshToken };
   }
